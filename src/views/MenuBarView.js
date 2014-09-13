@@ -3,6 +3,7 @@ define(function(require, exports, module) {
     var Modifier        = require('famous/core/Modifier');
     var Transform       = require('famous/core/Transform');
     var View            = require('famous/core/View');
+    var Easing          = require('famous/transitions/Easing');
 
     function MenuBarView() {
         View.apply(this, arguments);
@@ -15,12 +16,12 @@ define(function(require, exports, module) {
     MenuBarView.prototype.constructor = MenuBarView;
 
     MenuBarView.DEFAULT_OPTIONS = {
-        duration: 300
+        duration: 100
     };
 
     MenuBarView.prototype.animateIcon = function() {
 
-        var paramOptions =  {duration: this.options.duration, curve: 'easeInOut'};
+        var paramOptions =  {duration: this.options.duration, curve: Easing.easeInOut};
 
         //if filterViewSelected-- 
         //fade out menu icon, fade in X icon
@@ -75,7 +76,7 @@ define(function(require, exports, module) {
         //title
         var titleSurf = new Surface({
             size: [140, 35],
-            content: 'THINGLIST',
+            content: 'Let\'s have fun',
             properties: {
                 fontFamily: 'Arial Narrow',
                 fontSize: '24px',
@@ -110,10 +111,6 @@ define(function(require, exports, module) {
         this._add(questionIconMod).add(questionIconSurf);
     }
 
-    function _handleClick() {
-
-    }
-
     function _setListeners() {
         this.xIconSurf.on('touchstart', function() {
             if(this.filterViewSelected) {
@@ -121,14 +118,10 @@ define(function(require, exports, module) {
             }
         }.bind(this));
 
+
         this.xIconSurf.on('click', function() {
-            if(this.filterViewSelected) { //display list view & filter-icon
-                this.filterViewSelected = false;
-                this.animateIcon();
-            } else { //display filter view & x-icon
-                this.filterViewSelected = true;
-                this.animateIcon();
-            }
+            this.filterViewSelected = !this.filterViewSelected;
+            this.animateIcon();
             this._eventOutput.emit('filterViewToggle');
         }.bind(this));
     }
